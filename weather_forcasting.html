@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forcasting</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <style>
+        .col-md-4 div:hover{
+            box-shadow: 0px 0px 20px gray;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Enter City Name...." id="cityname">
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary btn-block" onclick="get_weather()">GET WEATHER</button>
+            </div>
+            <div class="col-md-12 text-center my-3">
+                <h1 id="city"></h1>
+            </div>
+        </div>
+    </div>
+    <div class="row" id="output">
+
+    </div>
+    <script>
+        function get_weather(){
+            var city = $('#cityname').val();
+        $.ajax({
+            url:"https://api.openweathermap.org/data/2.5/forecast?q="+city+"&mode=json&appid=65342d6ea8c9d7f18f9dc1c80f656d38",
+            type:"get",
+            success:function(data){
+                $("#city").html(data.city.name+ "("+data.city.country+")");
+                var rs = "";
+                for(i in data.list){
+                    rs += "<div class = 'col-md-4 text-center'><div class='alert alert-primary'>";
+                    rs += data.list[i].dt_txt+"<br/>"
+                    rs += "<img src='http://openweathermap.org/img/wn/"+data.list[i].weather[0].icon+"@2x.png'/><br/>"
+                    rs += data.list[i].main.temp+"&deg;C<br/>"
+                    rs += "<strong>"+data.list[i].weather[0].main+"</strong><hr/>"
+                    rs += "<em>"+data.list[i].weather[0].description+"</em><hr/>"
+                    rs += "</div></div>";
+                }  
+
+                $("#output").html(rs) 
+            }
+        })
+    }
+    </script>
+</body>
+</html>
